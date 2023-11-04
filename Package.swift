@@ -39,7 +39,6 @@ let package = Package(
                 "Libssl", "Libcrypto",
                 "Libdav1d",
                 "Libsrt",
-                "Libzvbi",
             ],
             linkerSettings: [
                 .linkedFramework("AudioToolbox"),
