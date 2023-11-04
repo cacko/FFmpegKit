@@ -147,10 +147,10 @@ let package = Package(
             name: "Libsrt",
             path: "Sources/Libsrt.xcframework"
         ),
-        .binaryTarget(
-            name: "Libzvbi",
-            path: "Sources/Libzvbi.xcframework"
-        ),
+        // .binaryTarget(
+        //     name: "Libzvbi",
+        //     path: "Sources/Libzvbi.xcframework"
+        // ),
 //        .binaryTarget(
 //            name: "Libass",
 //            path: "Sources/Libass.xcframework"

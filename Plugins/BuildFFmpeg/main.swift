@@ -80,7 +80,7 @@ extension Build {
             Build.ffmpegConfiguers.append("--enable-stripping")
         }
         if arguments.isEmpty {
-            librarys.append(contentsOf: [.libdav1d, .openssl, .libsrt, .libzvbi, .FFmpeg])
+            librarys.append(contentsOf: [.libdav1d, .openssl, .libsrt, .FFmpeg])
         } else if arguments == ["mpv"] {
             librarys.append(contentsOf: [.libdav1d, .openssl, .libsrt, .png, .libfreetype, .libfribidi, .harfbuzz, .libass, .FFmpeg, .mpv])
         }
@@ -118,7 +118,7 @@ extension Build {
 }
 
 private enum Library: String, CaseIterable {
-    case libfreetype, libfribidi, libass, openssl, libsrt, libsmbclient, gnutls, gmp, FFmpeg, nettle, harfbuzz, png, libdav1d, libtls, libzvbi, boringssl, mpv
+    case libfreetype, libfribidi, libass, openssl, libsrt, libsmbclient, gnutls, gmp, FFmpeg, nettle, harfbuzz, png, libdav1d, libtls, boringssl, mpv
     var version: String {
         switch self {
         case .FFmpeg:
@@ -152,8 +152,6 @@ private enum Library: String, CaseIterable {
             return "v6.2.1"
         case .libtls:
             return "OPENBSD_7_3"
-        case .libzvbi:
-            return "v0.2.42"
         case .boringssl:
             return "master"
         }
@@ -177,8 +175,6 @@ private enum Library: String, CaseIterable {
             return "https://github.com/videolan/dav1d"
         case .libtls:
             return "https://github.com/libressl/portable"
-        case .libzvbi:
-            return "https://github.com/zapping-vbi/zvbi.git"
         case .boringssl:
             return "https://github.com/google/boringssl"
         default:
@@ -192,7 +188,7 @@ private enum Library: String, CaseIterable {
 
     var isFFmpegDependentLibrary: Bool {
         switch self {
-        case .libdav1d, .openssl, .libsrt, .libsmbclient, .libzvbi:
+        case .libdav1d, .openssl, .libsrt, .libsmbclient:
             return true
         case .png, .harfbuzz, .nettle, .mpv, .FFmpeg:
             return false
@@ -233,8 +229,6 @@ private enum Library: String, CaseIterable {
             return BuildGmp()
         case .libtls:
             return BuildLibreSSL()
-        case .libzvbi:
-            return BuildZvbi()
         case .boringssl:
             return BuildBoringSSL()
         }
@@ -714,8 +708,6 @@ private class BuildFFMPEG: BaseBuild {
                 } else if library == .libass {
                     arguments.append("--enable-filter=ass")
                     arguments.append("--enable-filter=subtitles")
-                } else if library == .libzvbi {
-                    arguments.append("--enable-decoder=libzvbi_teletext")
                 }
             }
         }
@@ -857,24 +849,6 @@ private class BuildLibreSSL: BaseBuild {
             env["CFLAGS"]? += " -DOPENSSL_NO_SPEED=1"
         }
         return env
-    }
-}
-
-private class BuildZvbi: BaseBuild {
-    init() {
-        super.init(library: .libzvbi)
-        let path = directoryURL + "configure.ac"
-        if let data = FileManager.default.contents(atPath: path.path), var str = String(data: data, encoding: .utf8) {
-            str = str.replacingOccurrences(of: "AC_FUNC_MALLOC", with: "")
-            str = str.replacingOccurrences(of: "AC_FUNC_REALLOC", with: "")
-            try! str.write(toFile: path.path, atomically: true, encoding: .utf8)
-        }
-    }
-
-    override func platforms() -> [PlatformType] {
-        super.platforms().filter {
-            $0 != .maccatalyst
-        }
     }
 }
 
