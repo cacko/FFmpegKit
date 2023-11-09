@@ -704,8 +704,9 @@ private class BuildFFMPEG: BaseBuild {
         // Configuration options:
         "--disable-armv5te", "--disable-armv6", "--disable-armv6t2",
         "--disable-bzlib", "--disable-gray", "--disable-iconv", "--disable-linux-perf",
+        "--disable-shared",
         "--disable-xlib", "--disable-swscale-alpha", "--disable-symver", "--disable-small",
-        "--enable-cross-compile", "--enable-gpl", "--enable-libxml2", "--enable-nonfree",
+        "--enable-gpl", "--enable-libxml2", "--enable-nonfree",
         "--enable-runtime-cpudetect", "--enable-thumb", "--enable-version3", "--pkg-config-flags=--static",
         "--enable-static", "--disable-shared", "--enable-pic",
         // Documentation options:
